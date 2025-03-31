@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shinobi Systems - Campus Prep</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #5D6DFA;
+            --secondary-color: #C3CDFD;
+            --accent-color: #FF6B6B;
+            --dark-color: #2C3E50;
+            --light-color: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F8F9FA;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary-color), #7C8AFA);
+            padding: 15px 30px;
+            width: 100%;
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 10px 30px;
+            background: rgba(93, 109, 250, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .left-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 15px;
+            background-color: transparent;
+            border: none;
+            color: var(--light-color);
+            transition: var(--transition);
+        }
+
+        .menu-icon:hover {
+            transform: scale(1.1);
+            color: var(--accent-color);
+        }
+
+        .company-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--light-color);
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .share-icon {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            color: var(--light-color);
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .share-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: rotate(45deg);
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            overflow-x: hidden;
+            transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            padding-top: 80px;
+            z-index: 999;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.open {
+            width: 280px;
+        }
+
+        .sidebar a {
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--light-color);
+            display: block;
+            transition: var(--transition);
+            position: relative;
+            margin: 5px 0;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .sidebar.open a {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .sidebar a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding-left: 35px;
+        }
+
+        .sidebar a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background-color: var(--accent-color);
+            transform: scaleY(0);
+            transition: transform 0.2s, width 0.4s cubic-bezier(1, 0, 0, 1) 0.2s;
+        }
+
+        .sidebar a:hover::before {
+            transform: scaleY(1);
+            width: 100%;
+            opacity: 0.2;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-top: 80px;
+            padding: 30px;
+            transition: margin-left 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            min-height: calc(100vh - 80px);
+        }
+
+        .main-content.shifted {
+            margin-left: 280px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), #7C8AFA);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+            animation: shine 8s infinite linear;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            position: relative;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            position: relative;
+            animation: slideIn 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 30px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.8s ease-out 0.4s forwards;
+            opacity: 0;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .cta-button:hover::after {
+            transform: translateX(100%);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: backwards;
+        }
+
+        .feature-card:nth-child(1) {
+            animation-delay: 0.6s;
+        }
+        .feature-card:nth-child(2) {
+            animation-delay: 0.8s;
+        }
+        .feature-card:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .feature-card p {
+            color: #666;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shine {
+            from { transform: rotate(30deg) translateX(-100%); }
+            to { transform: rotate(30deg) translateX(100%); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar.open {
+                width: 250px;
+            }
+            
+            .main-content.shifted {
+                margin-left: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar" id="navbar">
+        <div class="left-section">
+            <button class="menu-icon" onclick="toggleSidebar()">☰</button>
+            <span class="company-name">Shinobi Systems</span>
+        </div>
+        <div class="right-section">
+            <button class="share-icon" onclick="sharePage()">↪</button>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <a href="#"><i class="fas fa-home"></i> Home</a>
+        <a href="#"><i class="fas fa-comment"></i> Verbal Reasoning</a>
+        <a href="#"><i class="fas fa-shapes"></i> Non-Verbal Reasoning</a>
+        <a href="#"><i class="fas fa-code"></i> Coding Practice</a>
+        <a href="#"><i class="fas fa-building"></i> Company Questions</a>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <div class="hero">
+            <h1>Welcome to Shinobi Systems</h1>
+            <p>Prepare for campus recruitment with our comprehensive training tools and resources designed to help you land your dream job!</p>
+            <a href="#" class="cta-button">Get Started</a>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-brain"></i>
+                <h3>Aptitude Training</h3>
+                <p>Master quantitative, verbal, and logical reasoning with our extensive question bank and detailed solutions.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-laptop-code"></i>
+                <h3>Coding Challenges</h3>
+                <p>Practice coding problems from top companies with our interactive coding environment and real-time feedback.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Performance Analytics</h3>
+                <p>Track your progress with detailed analytics and personalized recommendations for improvement.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const mainContent = document.getElementById("mainContent");
+            
+            sidebar.classList.toggle("open");
+            mainContent.classList.toggle("shifted");
+            
+            // Animate menu items sequentially
+            const menuItems = document.querySelectorAll('.sidebar a');
+            if (sidebar.classList.contains('open')) {
+                menuItems.forEach((item, index) => {
+                    item.style.transitionDelay = `${index * 0.1}s`;
+                });
+            } else {
+                menuItems.forEach(item => {
+                    item.style.transitionDelay = '0s';
+                });
+            }
+        }
+
+        // Share page functionality
+        function sharePage() {
+            if (navigator.share) {
+                navigator.share({
+                    title: "Shinobi Systems - Campus Prep",
+                    text: "Check out this awesome campus recruitment training website!",
+                    url: window.location.href
+                })
+                .then(() => console.log("Shared successfully"))
+                .catch((error) => console.log("Error sharing:", error));
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const shareUrl = window.location.href;
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    // Create and show a custom notification
+                    const notification = document.createElement('div');
+                    notification.textContent = 'Link copied to clipboard!';
+                    notification.style.position = 'fixed';
+                    notification.style.bottom = '20px';
+                    notification.style.right = '20px';
+                    notification.style.backgroundColor = 'var(--primary-color)';
+                    notification.style.color = 'white';
+                    notification.style.padding = '15px 25px';
+                    notification.style.borderRadius = '50px';
+                    notification.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+                    notification.style.zIndex = '10000';
+                    notification.style.animation = 'fadeIn 0.3s, fadeIn 0.3s reverse 2s forwards';
+                    document.body.appendChild(notification);
+                    
+                    // Remove after animation completes
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 2500);
+                });
+            }
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Small delay to allow for initial render
+            setTimeout(() => {
+                document.querySelector('.hero').style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
